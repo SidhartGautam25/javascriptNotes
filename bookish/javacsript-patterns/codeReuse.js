@@ -190,3 +190,24 @@ kid.name; // "Patrick"
 kid.say(); // "Patrick"
 delete kid.name;
 kid.say(); // "Adam"
+
+// Unlike the previous pattern, now say() is inherited properly. You can also notice that
+// name is inherited two times, and after we delete the own copy, the one that comes down
+// the prototype chain will shine through.
+
+
+// ------------%%%%%%%%%%%%%%%%%-------------------
+//    Classical Pattern #4—Share the Prototype
+// ------------%%%%%%%%%%%%%%%%%-------------------
+
+
+// Unlike the previous classical inheritance pattern, which required two calls to the parent
+// constructor, the next pattern doesn’t involve calling the parent constructor at all.
+
+// The rule of thumb was that reusable members should go to the prototype and not this.
+// Therefore for inheritance purposes, anything worth inheriting should be in the prototype
+
+//  So you can just set the child’s prototype to be the same as the parent’s prototype:
+function inherit(C, P) {
+ C.prototype = P.prototype;
+}
