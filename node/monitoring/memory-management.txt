@@ -1,0 +1,3 @@
+clinic.js to indentify memory usages
+2. Can monitor memory usage with process.memoryUsage() to observe memory growth over time
+3. 
