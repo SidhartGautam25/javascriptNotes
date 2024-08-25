@@ -1,0 +1,37 @@
+LHS Lookup
+    -LHS lookup refers to the process of finding the location where a value should be assigned or 
+    -retrieved from a variable or property on the left side of an assignment statement.
+
+    -It determines where to store the value or how to update the existing value of a variable 
+    -or object property.
+
+
+    Ex-
+      -let x = 10; // LHS lookup: JavaScript looks for `x` in the current scope to assign `10`
+
+      let obj = {};
+      obj.name = 'Alice'; // LHS lookup: JavaScript looks for `name` property on `obj` and assigns `'Alice'`
+
+      x = 20; // LHS lookup: JavaScript looks for `x` to update its value to `20`
+
+
+RHS Lookup
+    -RHS lookup refers to the process of finding the value of a variable or property that is used 
+    -on the right side of an assignment statement.
+
+    -It determines what value should be used to assign or operate on the variable or property
+
+    -During an RHS lookup, JavaScript retrieves the value from the environment where the variable or 
+    -property is located. It involves accessing the value that’s associated with a variable or property.
+
+    Ex-
+        console.log(x); // RHS lookup: JavaScript retrieves the value of `x` from the current scope
+
+        let obj = { name: 'Alice' };
+        console.log(obj.name); // RHS lookup: JavaScript retrieves the value of `name` property from `obj`
+
+        let y = x + 5; // RHS lookup: JavaScript retrieves the value of `x`, adds `5`, and assigns it to `y`
+
+
+
+

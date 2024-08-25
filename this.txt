@@ -1,0 +1,171 @@
+-The this keyword refers to the context where a piece of code, such as a function's body, is supposed to run.
+-Most typically, it is used in object methods, where this refers to the object that the method is attached to,
+thus allowing the same method to be reused on different objects.
+
+
+-The value of this in JavaScript depends on how a function is invoked (runtime binding), not how it is 
+ defined. When a regular function is invoked as a method of an object (obj.method()), this points to that 
+ object. When invoked as a standalone function (not attached to an object: func()), this typically refers 
+ to the global object (in non-strict mode) or undefined (in strict mode).
+
+
+
+-Arrow functions differ in their handling of this: they inherit this from the parent scope at the time 
+ they are defined. This behavior makes arrow functions particularly useful for callbacks and preserving 
+ context. However, arrow functions do not have their own this binding. Therefore, their this value 
+ cannot be set by bind(), apply() or call() methods, nor does it point to the current object in object 
+ methods.
+
+
+-The value of this always changes based on how a function is called, even when the function was defined 
+ on an object at creation:
+
+        //code
+         const obj4 = {
+            name: "obj4",
+            getThis() {
+                return this;
+            },
+         };
+
+         const obj5 = { name: "obj5" };
+
+         obj5.getThis = obj4.getThis;
+         console.log(obj5.getThis()); // { name: 'obj5', getThis: [Function: getThis] }
+
+
+
+
+//code
+const person = {
+  firstName: 'John',
+  lastName: 'Doe',
+  printName: function() {
+    console.log(this.firstName + ' ' + this.lastName);
+  }
+};
+person.printName();// John Doe
+const printFullName = person.printName;
+printFullName();// undefined undefined
+
+Here, we are storing a reference of person.printName to printFullName variable. After that, 
+we are calling it without an object reference, so this will now refer to the window (global) object
+or undefined (in strict mode).
+
+If the script is in strict mode, this refers to undefined, so console.log() will return an error.
+
+
+//code with explanation
+const counter = {
+  count: 0,
+  incrementCounter: function() {
+    console.log(this);
+    this.count++;
+  }
+}
+document.querySelector('.btn').addEventListener('click', counter.incrementCounter);
+       
+        -In the above snippet, the this keyword refers to the DOM element where the event happened, 
+         not the counter object.
+
+        -We use call, bind and apply methods to set the this keyword independent of how the function 
+         is called. This is especially useful for the callbacks (as in the above example).
+
+
+!!!! Bind() !!!!
+    -The bind method creates a new function and sets the this keyword to the specified object.
+    Syntax-
+       function.bind(thisArg, optionalArguments)
+
+    Ex-
+         //code
+         const john = {
+            name: 'John',
+            age: 24,
+         };
+         const jane = {
+            name: 'Jane',
+            age: 22,
+         };
+         function greeting() {
+            console.log(`Hi, I am ${this.name} and I am ${this.age} years old`);
+         }
+
+         We can use the bind method on the greeting function to bind the this keyword
+         to john and jane objects. For example:
+            const greetingJohn = greeting.bind(john);
+            // Hi, I am John and I am 24 years old
+            greetingJohn();
+            const greetingJane = greeting.bind(jane);
+            // Hi, I am Jane and I am 22 years old
+            greetingJane();
+
+
+We can also use bind in case of callbacks and event handlers. For example:
+       
+//code
+const counter = {
+  count: 0,
+  incrementCounter: function() {
+    console.log(this);
+    this.count++;
+  }
+}
+document.querySelector('.btn').addEventListener('click', counter.incrementCounter.bind(counter));
+
+In the above example, the this keyword inside the incrementCounter method will now correctly refer 
+to the counter object instead of the event object.
+
+We can also pass extra arguments to the bind method. The general syntax for this is 
+function.bind(this, arg1, arg2, ...). For example:
+
+//code
+function greeting(lang) {
+  console.log(`${lang}: I am ${this.name}`);
+}
+const john = {
+  name: 'John'
+};
+const jane = {
+  name: 'Jane'
+};
+const greetingJohn = greeting.bind(john, 'en');
+greetingJohn();
+const greetingJane = greeting.bind(jane, 'es');
+greetingJane();
+
+!!!!  Call()   !!!!
+The call method sets the this inside the function and immediately executes that function.
+
+The difference between call() and bind() is that the call() sets the this keyword and executes the 
+function immediately and it does not create a new copy of the function, while the bind() creates a 
+copy of that function and sets the this keyword.
+
+Ex:
+//code
+function greeting() {
+  console.log(`Hi, I am ${this.name} and I am ${this.age} years old`);
+}
+const john = {
+  name: 'John',
+  age: 24,
+};
+const jane = {
+  name: 'Jane',
+  age: 22,
+};
+// Hi, I am John and I am 24 years old
+greeting.call(john);
+// Hi, I am Jane and I am 22 years old
+greeting.call(jane);
+
+Call() also accepts a comma-separated list of arguments. The general syntax for this is 
+function.call(this, arg1, arg2, ...)
+
+
+!!!!  Apply()  !!!!
+The apply() method is similar to call(). The difference is that the apply() method accepts an array of 
+arguments instead of comma separated values.
+
+Syntax:
+function.apply(thisArg, [argumentsArr])

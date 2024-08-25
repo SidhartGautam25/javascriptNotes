@@ -1,0 +1,57 @@
+As a way of getting rid of the interpreter’s inefficiency—where the interpreter has to keep 
+retranslating the code every time they go through the loop—browsers started mixing compilers in.
+
+Different browsers do this in slightly different ways, but the basic idea is the same. 
+They added a new part to the JavaScript engine, called a monitor (aka a profiler). That 
+monitor watches the code as it runs, and makes a note of how many times it is run and what types are used.
+
+At first, the monitor just runs everything through the interpreter.
+
+
+--> If the same lines of code are run a few times, that segment of code is called warm. 
+--> If it’s run a lot, then it’s called hot.
+
+
+Runtime vs Compile Time
+    -compiler translate the entire program into machine code before execution
+    -Translates and executes the code line-by-line.
+
+    -Generates an independent executable file (machine code).
+    -Directly executes the code without generating a separate file.
+
+    -Compile time is the phase during which source code is translated into machine code by a 
+     compiler before the program is executed.
+
+    -Runtime is the phase when the compiled program is executed by the operating system.
+
+
+
+!!!   Bindings    !!!!
+     In JavaScript, binding refers to the process of associating functions, variables, or objects with 
+     specific values or behaviors
+
+     Static Bindings
+          -This type of binding occurs when the reference to the function or variable is determined at 
+          compile time.
+
+
+
+!!!! Typing !!!!
+     In statically typed languages, the type of a variable is determined at compile time, before the 
+     program runs. Type checks are done during compilation, and errors related to types are caught early.
+
+     In dynamically typed languages, the type of a variable is determined at runtime, not at compile time.
+     Type checks are performed during the execution of the program, and variables can hold values 
+     of any type.
+
+
+
+!!!! Binding !!!!
+
+Binding refers to the association of names in program text to the storage locations to which they refer.
+In static binding, this association is predetermined at compile time. With dynamic binding, this 
+association is not determined until run time.
+     ex:   If someone attempts to invoke a method like MyClass.foo(), a static binding system will verify
+           at build time that there is a class called MyClass and that class has a method called foo. 
+           A dynamic binding system will wait until run time to see whether either exists.
+
