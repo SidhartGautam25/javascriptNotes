@@ -123,9 +123,23 @@ muffin.age;
 // 4
 
 // First, notice that I did not just change the value of the prototype.age property to 4,
-//     I actually changed the Cat function's prototype to point to a new object. So while 
+//     I actually changed the Cat function's prototype to point to a new object. So while
 // Muffin inherited the new prototype object, Fluffy's and Scratchy's prototypes are still
-//  pointing to their original prototype object, which they originally inherited from the 
+//  pointing to their original prototype object, which they originally inherited from the
 //  Cat function. This illustrates the point that a function's prototype property "is the
-//   object instance which will become the prototype(or __proto__) for objects created 
+//   object instance which will become the prototype(or __proto__) for objects created
 //   using this function as a constructor."
+
+
+// The double square brackets that enclose[[Prototype]] signify that it is an internal
+// property, and cannot be accessed directly in code.
+
+// It is important to note that.__proto__ is a legacy feature and should not be used
+// in production code, and it is not present in every modern browser.However, we can use it
+// throughout this article for demonstrative purposes.
+
+// When you attempt to access a property or method of an object, JavaScript will first 
+// search on the object itself, and if it is not found, it will search the
+// object’s[[Prototype]].If after consulting both the object and its[[Prototype]] still 
+// no match is found, JavaScript will check the prototype of the linked object,
+// and continue searching until the end of the prototype chain is reached.
