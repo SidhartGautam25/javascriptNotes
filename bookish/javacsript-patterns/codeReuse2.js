@@ -1,6 +1,5 @@
 // modern inheritance patterns
 
-
 // ------------%%%%%%%%%%%%%%%%%-------------------
 //          Prototypal Inheritance
 // ------------%%%%%%%%%%%%%%%%%-------------------
@@ -13,13 +12,12 @@
 //ex:
 // object to inherit from
 var parent = {
- name: "Papa"
+  name: "Papa",
 };
 // the new object
 var child = object(parent);
 // testing
 alert(child.name); // "Papa"
-
 
 // In the preceding snippet, you have an existing object called parent created with the
 // object literal, and you want to create another object called child that has the same
@@ -28,9 +26,9 @@ alert(child.name); // "Papa"
 // constructor function Object()), so let’s see how you can define it.
 
 function object(o) {
- function F() {}
- F.prototype = o;
- return new F();
+  function F() {}
+  F.prototype = o;
+  return new F();
 }
 
 // Here child always starts as an empty object, which has no properties of its own but at
@@ -42,12 +40,12 @@ function object(o) {
 
 // parent constructor
 function Person() {
- // an "own" property
- this.name = "Adam";
+  // an "own" property
+  this.name = "Adam";
 }
 // a property added to the prototype
 Person.prototype.getName = function () {
- return this.name;
+  return this.name;
 };
 // create a new person
 var papa = new Person();
@@ -62,18 +60,17 @@ kid.getName(); // "Adam"
 
 // parent constructor
 function Person() {
- // an "own" property
- this.name = "Adam";
+  // an "own" property
+  this.name = "Adam";
 }
 // a property added to the prototype
 Person.prototype.getName = function () {
- return this.name;
+  return this.name;
 };
 // inherit
 var kid = object(Person.prototype);
 typeof kid.getName; // "function", because it was in the prototype
 typeof kid.name; // "undefined", because only the prototype was inherited
-
 
 // ------------%%%%%%%%%%%%%%%%%-------------------
 //         Addition to ECMAScript 5
@@ -90,10 +87,9 @@ var child = Object.create(parent);
 // a convenience that enables you to inherit and build upon the child object with one
 // method call. For example:
 var child = Object.create(parent, {
- age: { value: 2 } // ECMA5 descriptor
+  age: { value: 2 }, // ECMA5 descriptor
 });
 child.hasOwnProperty("age"); // true
-
 
 // ------------%%%%%%%%%%%%%%%%%-------------------
 //         Inheritance by Copying Properties
@@ -104,20 +100,20 @@ child.hasOwnProperty("age"); // true
 // Here’s an example implementation of a sample function extend() that does that:
 
 function extend(parent, child) {
- var i;
- child = child || {};
- for (i in parent) {
- if (parent.hasOwnProperty(i)) {
- child[i] = parent[i];
- }
- }
- return child;
+  var i;
+  child = child || {};
+  for (i in parent) {
+    if (parent.hasOwnProperty(i)) {
+      child[i] = parent[i];
+    }
+  }
+  return child;
 }
 // It’s a simple implementation, just looping through the parent’s members and copying
 // them over. In this implementation child is optional; if you don’t pass an existing object
 // to be augmented, then a brand new object is created and returned:
 
-var dad = {name: "Adam"};
+var dad = { name: "Adam" };
 var kid = extend(dad);
 kid.name; // "Adam"
 
@@ -132,8 +128,8 @@ kid.name; // "Adam"
 // when working with other objects and arrays.
 //Ex:
 var dad = {
- counts: [1, 2, 3],
- reads: {paper: true}
+  counts: [1, 2, 3],
+  reads: { paper: true },
 };
 var kid = extend(dad);
 kid.counts.push(4);
@@ -146,27 +142,27 @@ dad.reads === kid.reads; // true
 // Another check you need is if the object is a true object or if it’s an array.
 
 function extendDeep(parent, child) {
- var i,
- toStr = Object.prototype.toString,
- astr = "[object Array]";
- child = child || {};
- for (i in parent) {
- if (parent.hasOwnProperty(i)) {
- if (typeof parent[i] === "object") {
- child[i] = (toStr.call(parent[i]) === astr) ? [] : {};
- extendDeep(parent[i], child[i]);
- } else {
- child[i] = parent[i];
- }
- }
- }
- return child;
+  var i,
+    toStr = Object.prototype.toString,
+    astr = "[object Array]";
+  child = child || {};
+  for (i in parent) {
+    if (parent.hasOwnProperty(i)) {
+      if (typeof parent[i] === "object") {
+        child[i] = toStr.call(parent[i]) === astr ? [] : {};
+        extendDeep(parent[i], child[i]);
+      } else {
+        child[i] = parent[i];
+      }
+    }
+  }
+  return child;
 }
 // Now testing the new implementation gives us true copies of objects, so child objects
 // don’t modify their parents:
 var dad = {
- counts: [1, 2, 3],
- reads: {paper: true}
+  counts: [1, 2, 3],
+  reads: { paper: true },
 };
 var kid = extendDeep(dad);
 kid.counts.push(4);
@@ -177,8 +173,6 @@ kid.reads.paper = false;
 kid.reads.web = true;
 dad.reads.paper; // true
 
-
-
 // ------------%%%%%%%%%%%%%%%%%-------------------
 //                  Mix-ins
 // ------------%%%%%%%%%%%%%%%%%-------------------
@@ -187,19 +181,42 @@ dad.reads.paper; // true
 // objects and mix them all into a new object.
 
 function mix() {
- var arg, prop, child = {};
- for (arg = 0; arg < arguments.length; arg += 1) {
- for (prop in arguments[arg]) {
- if (arguments[arg].hasOwnProperty(prop)) {
- child[prop] = arguments[arg][prop];
- }
- }
- }
- return child;
+  var arg,
+    prop,
+    child = {};
+  for (arg = 0; arg < arguments.length; arg += 1) {
+    for (prop in arguments[arg]) {
+      if (arguments[arg].hasOwnProperty(prop)) {
+        child[prop] = arguments[arg][prop];
+      }
+    }
+  }
+  return child;
 }
 var cake = mix(
- {eggs: 2, large: true},
- {butter: 1, salted: true},
- {flour: "3 cups"},
- {sugar: "sure!"}
+  { eggs: 2, large: true },
+  { butter: 1, salted: true },
+  { flour: "3 cups" },
+  { sugar: "sure!" }
 );
+
+// <table className="min-w-full bg-white border border-gray-400">
+//   <thead className="border border-gray-200">
+//     <tr>
+//       {/* <th className="py-2 px-4 border">ID</th> */}
+//       <th className="py-2 px-4 border border-r border-r-slate-300 bg-gray-700/10">
+//         Report Attribute
+//       </th>
+//       <th className="py-2 px-4 border bg-gray-700/10">Details</th>
+//     </tr>
+//   </thead>
+//   <tbody>
+//     {data?.map((item: any, ind: any) => (
+//       <tr key={ind}>
+//         {/* <td className="py-2 px-4 border">{ind + 1}</td> */}
+//         <td className="py-2 px-4 border">{item.key}</td>
+//         <td className="py-2 px-4 border">{item.value}</td>
+//       </tr>
+//     ))}
+//   </tbody>
+// </table>;

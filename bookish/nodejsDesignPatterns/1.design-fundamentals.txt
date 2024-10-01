@@ -1,0 +1,107 @@
+-------------------------->     Reactor Pattern       <--------------------------
+
+node js follows this Pattern
+> for this pattern,we need to understand four important stuff
+             > event demultiplexer
+             > event loop
+             > event queue
+             > application
+
+> event demultiplexer(in case of node,this job is done by libuv)
+       > responsible for abstracting and handling asynchronous I/O operations
+
+       > Node.js can handle multiple I/O operations (file system reads/writes, 
+         network requests, etc.) without halting the execution of other code. 
+         This is possible because the Demultiplexer watches for I/O events and 
+         allows the Event Loop to continue processing other tasks.
+
+> lets take a code 
+
+
+...............................................
+    const fs = require('fs');
+
+console.log('1. Start of script');
+
+// Asynchronous file read operation
+fs.readFile('example.txt', 'utf8', (err, data) => {
+  if (err) throw err;
+  console.log('4. File content:', data);
+});
+
+console.log('2. End of script');
+.....................................................
+
+> When fs.readFile() is called, it triggers an I/O operation (Step 1). The request is
+  sent to the operating system through the libuv event demultiplexer (Step 2).
+
+> While the file is being read, the Node.js event loop continues its operation and 
+  reaches the console.log('2. End of script'); (Step 3)
+
+> Once the file reading is done, an event is placed in the event queue (Step 4).
+
+> The event loop detects that there’s a new event in the queue, retrieves it, 
+  and invokes the callback function (Step 5).
+
+> The file content is printed via console.log('4. File content:', data); (Step 6).
+
+
+now takes this code ->
+
+
+--------------------------------------------------------
+                                                        | 
+console.log('before');                                  |
+setTimeout(function() {                                 |
+  console.log('Result: Timeout callback executed');     |
+}, 1000);                                               |
+console.log('after');                                   |
+                                                        |
+________________________________________________________|                                                        
+
+> console.log('before') (Synchronous Call):
+       > This is a synchronous operation, so it gets immediately pushed onto the 
+         Call Stack.
+
+       > The message "before" is logged to the console.
+       > Once the logging is done, console.log('before') is popped from the Call Stack,
+         and the next statement is processed.
+
+> setTimeout(callback, 1000) (Asynchronous Call):
+       > When setTimeout is called, it gets pushed onto the Call Stack.
+       > The setTimeout function is provided with a callback function and a 
+         delay of 1000 ms (1 second).
+       > setTimeout does not block the Call Stack because it is asynchronous. Instead,
+         it instructs Node.js's Timers API (managed by libuv, Node.js's underlying 
+         system library) to wait for 1 second and then execute the provided callback.
+
+Here's what happens internally:
+     
+      > Timers Phase: The Timer is started, and the countdown begins. The setTimeout 
+        call is removed from the Call Stack once the timer is set.
+
+      > The callback function is registered 
+
+      > The Call Stack is now free to execute the next line.
+
+console.log('after') (Synchronous Call):
+     > Like the earlier console.log('before'), this statement is synchronous and 
+       immediately pushed onto the Call Stack.
+     > It logs the message "after" to the console.
+     > Once done, console.log('after') is popped from the Call Stack.
+
+At this point, the Call Stack is empty, but the Timers Phase is still counting down
+for 1 second.
+
+After 1 Second (Timer Expiration):
+     > After the specified delay of 1000 ms (1 second), the Timer is ready to execute 
+       the callback function.
+     > The Timer pushes the callback function (that logs "Result: Timeout callback 
+       executed") into the Timers Queue (a part of the Event Queue system).  
+
+    > The Event Loop continuously checks the Call Stack and various queues
+      (like the Timers Queue) to see if there are tasks that need to be executed.
+    > If the Call Stack is empty (which it is, since console.log('after') already finished),
+      the Event Loop picks the callback function from the Timers Queue and pushes it 
+      onto the Call Stack for execution. 
+ 
